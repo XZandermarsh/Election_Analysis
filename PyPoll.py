@@ -53,12 +53,26 @@ with open(file_to_load, 'r') as election_data:
             candidate_votes[candidate_name] = 0
         candidate_votes[candidate_name] += 1
 
+with open(file_to_save, "w") as txt_file:
+    election_results = (
+        f"\nElection Results\n"
+        f"--------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"--------------------\n"
+    )
+    
+    print(election_results, end="")
+    txt_file.write(election_results)
     # print out results by percentage for each candidate
     for candidate_name in candidate_votes:
         votes = candidate_votes[candidate_name]
         vote_percentage = float(votes) / float(total_votes)*100
-        print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
-        # Determine winning vote count and candidate
+        candidate_results = (f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+        # Print each candidate, their voter count, and percentage to the terminal.
+        print(candidate_results)
+        
+        #  Save the candidate results to our text file.
+        txt_file.write(candidate_results)
         # Determine if the votes is greater than the winning count.
         if (votes > winning_count) and (vote_percentage > winning_percentage):
             # If true then set winning_count = votes and winning_percent =
@@ -68,12 +82,14 @@ with open(file_to_load, 'r') as election_data:
             # And, set the winning_candidate equal to the candidate's name.
             winning_candidate = candidate_name
     winning_candidate_summary = (
-        f"-----------------------\n"
-        f"Winner: {winning_candidate}\n"
-        f"Winning Vote Count: {winning_count:,}\n"
-        f"Winning Percentage: {winning_percentage:.1f}%\n"
-        f"-----------------------\n")
+       f"-----------------------\n"
+       f"Winner: {winning_candidate}\n"
+       f"Winning Vote Count: {winning_count:,}\n"
+       f"Winning Percentage: {winning_percentage:.1f}%\n"
+       f"-----------------------\n")
+    
+    
+    print(f"--------------------\n")
+    txt_file.write(f"--------------------\n")
     print(winning_candidate_summary)
-
-# Close the file.
-election_data.close()
+    txt_file.write(winning_candidate_summary)
